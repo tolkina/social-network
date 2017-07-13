@@ -1,13 +1,10 @@
 package com.bootcamp.socialnetwork.domain;
 
-import org.apache.commons.lang3.StringUtils;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
-import java.util.Locale;
 
 @Entity
 @Table(name = "user")
@@ -21,7 +18,7 @@ public class User implements Serializable {
     private String password;
 
     @Column(name = "enabled")
-    private Boolean enabled;
+    private boolean enabled;
 
     @Column(name = "first_name", length = 60)
     private String firstName;
@@ -48,12 +45,17 @@ public class User implements Serializable {
     private String resume;
 
 
+    public User() {
+
+    }
+
+
     public String getUsername() {
         return username;
     }
 
     public void setUsername(String username) {
-        this.username = StringUtils.lowerCase(username, Locale.ENGLISH);
+        this.username = username;
     }
 
     public String getPassword() {
@@ -64,11 +66,11 @@ public class User implements Serializable {
         this.password = password;
     }
 
-    public Boolean getEnabled() {
+    public boolean isEnabled() {
         return enabled;
     }
 
-    public void setEnabled(Boolean enabled) {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 

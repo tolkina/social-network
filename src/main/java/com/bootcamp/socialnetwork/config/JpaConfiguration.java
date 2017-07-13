@@ -38,8 +38,8 @@ public class JpaConfiguration {
 
     /*
      * Populate SpringBoot DataSourceProperties object directly from application.yml
-     * based on prefix. Thanks to .yml, Hierarchical data is mapped out of the box with matching-name
-     * properties of DataSourceProperties object.
+     * based on prefix. Thanks to .yml, hierarchical data is mapped out of the box with
+     * matching-name properties of DataSourceProperties object.
      */
     @Bean
     @Primary
@@ -73,7 +73,7 @@ public class JpaConfiguration {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws NamingException {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setDataSource(dataSource());
-        factoryBean.setPackagesToScan(new String[]{"com.bootcamp.socialnetwork.domain"});
+        factoryBean.setPackagesToScan("com.bootcamp.socialnetwork.domain");
         factoryBean.setJpaVendorAdapter(jpaVendorAdapter());
         factoryBean.setJpaProperties(jpaProperties());
         return factoryBean;
@@ -84,12 +84,11 @@ public class JpaConfiguration {
      */
     @Bean
     public JpaVendorAdapter jpaVendorAdapter() {
-        HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
-        return hibernateJpaVendorAdapter;
+        return new HibernateJpaVendorAdapter();
     }
 
     /*
-     * Here you can specify any provider specific properties.
+     * Provider specific properties.
      */
     private Properties jpaProperties() {
         Properties properties = new Properties();
@@ -110,9 +109,9 @@ public class JpaConfiguration {
 
     @Bean
     @Autowired
-    public PlatformTransactionManager transactionManager(EntityManagerFactory emf) {
-        JpaTransactionManager txManager = new JpaTransactionManager();
-        txManager.setEntityManagerFactory(emf);
-        return txManager;
+    public PlatformTransactionManager transactionManager(EntityManagerFactory managerFactory) {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(managerFactory);
+        return transactionManager;
     }
 }
