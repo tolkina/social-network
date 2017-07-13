@@ -22,20 +22,20 @@ public class UserServiceImpl implements UserService {
     private ModelMapper modelMapper;
 
 
-    public UserDto findByUsername(String username) {
+    public UserDto findUserByUsername(String username) {
         try {
-            return modelMapper.map(userRepository.findByUsername(username), UserDto.class);
+            return modelMapper.map(userRepository.findUserByUsername(username), UserDto.class);
         } catch (IllegalArgumentException e) {
             return null;
         }
     }
 
-    public void saveUser(UserDto user) {
-        userRepository.save(modelMapper.map(user, User.class));
+    public void saveUser(UserDto userDto) {
+        userRepository.save(modelMapper.map(userDto, User.class));
     }
 
-    public void updateUser(UserDto user) {
-        saveUser(user);
+    public void updateUser(UserDto userDto) {
+        saveUser(userDto);
     }
 
     public void deleteUserByUsername(String username) {
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
         return users;
     }
 
-    public boolean isUserExist(UserDto user) {
-        return findByUsername(user.getUsername()) != null;
+    public boolean isUserExist(UserDto userDto) {
+        return findUserByUsername(userDto.getUsername()) != null;
     }
 }

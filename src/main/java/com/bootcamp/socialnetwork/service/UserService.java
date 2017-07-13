@@ -6,11 +6,11 @@ import java.util.List;
 
 public interface UserService {
 
-    UserDto findByUsername(String username);
+    UserDto findUserByUsername(String username);
 
-    void saveUser(UserDto user);
+    void saveUser(UserDto userDto);
 
-    void updateUser(UserDto user);
+    void updateUser(UserDto userDto);
 
     void deleteUserByUsername(String username);
 
@@ -18,5 +18,5 @@ public interface UserService {
 
     List<UserDto> findAllUsers();
 
-    boolean isUserExist(UserDto user);
+    boolean isUserExist(UserDto userDto);
 }

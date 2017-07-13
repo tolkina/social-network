@@ -43,7 +43,7 @@ public class RestApiController {
 
         LOGGER.info("Fetching User with username {}", username);
 
-        UserDto user = userService.findByUsername(username);
+        UserDto user = userService.findUserByUsername(username);
         if (user == null) {
             LOGGER.error("User with username {} not found.", username);
             return new ResponseEntity<>(new CustomError("User with username " + username
@@ -79,7 +79,7 @@ public class RestApiController {
 
         LOGGER.info("Updating User with id {}", username);
 
-        UserDto currentUser = userService.findByUsername(username);
+        UserDto currentUser = userService.findUserByUsername(username);
         if (currentUser == null) {
             LOGGER.error("Unable to update. User with username {} not found.", username);
             return new ResponseEntity<>(new CustomError("Unable to update. User with username " +
@@ -100,7 +100,7 @@ public class RestApiController {
 
         LOGGER.info("Fetching & Deleting User with username {}", username);
 
-        UserDto user = userService.findByUsername(username);
+        UserDto user = userService.findUserByUsername(username);
         if (user == null) {
             LOGGER.error("Unable to delete. User with username {} not found.", username);
             return new ResponseEntity<>(new CustomError("Unable to delete. User with username " +
