@@ -1,5 +1,6 @@
 package com.bootcamp.socialnetwork.web.rest;
 
+import com.bootcamp.socialnetwork.domain.Post;
 import com.bootcamp.socialnetwork.service.PostService;
 import com.bootcamp.socialnetwork.service.UserService;
 import com.bootcamp.socialnetwork.service.dto.PostDto;
@@ -55,8 +56,8 @@ public class RestApiController {
     // -------------------- Retrieve All User Posts --------------------
 
     @RequestMapping(value = "/user/{username}/post/", method = RequestMethod.GET)
-    public ResponseEntity<List<PostDto>> listAllUserPosts(@PathVariable("username") String username) {
-        List<PostDto> posts = postService.findPostsByUsername(username);
+    public ResponseEntity<List<Post>> listAllUserPosts(@PathVariable("username") String username) {
+        List<Post> posts = postService.findPostsByUsername(username);
         if (posts.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }

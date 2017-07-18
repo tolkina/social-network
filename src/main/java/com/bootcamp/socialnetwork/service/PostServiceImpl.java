@@ -31,7 +31,7 @@ public class PostServiceImpl implements PostService {
         }
     }
 
-    @Override
+    /*@Override
     public List<PostDto> findPostsByUsername(String username) {
         List<PostDto> postDtoList = new ArrayList<>();
         for (Post post : postRepository.findAll()) {
@@ -40,6 +40,11 @@ public class PostServiceImpl implements PostService {
             }
         }
         return postDtoList;
+    }*/
+
+    @Override
+    public List<Post> findPostsByUsername(String username) {
+        return postRepository.findPostsByUsername(username);
     }
 
     @Override
