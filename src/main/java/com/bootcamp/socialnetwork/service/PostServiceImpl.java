@@ -31,17 +31,6 @@ public class PostServiceImpl implements PostService {
         }
     }
 
-    /*@Override
-    public List<PostDto> findPostsByUsername(String username) {
-        List<PostDto> postDtoList = new ArrayList<>();
-        for (Post post : postRepository.findAll()) {
-            if (post.getUsername().equals(username)) {
-                postDtoList.add(modelMapper.map(post, PostDto.class));
-            }
-        }
-        return postDtoList;
-    }*/
-
     @Override
     public List<Post> findPostsByUsername(String username) {
         return postRepository.findPostsByUsername(username);

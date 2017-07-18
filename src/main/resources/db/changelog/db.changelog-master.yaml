@@ -45,6 +45,10 @@ databaseChangeLog:
               - column:
                   name: resume
                   type: varchar(1000)
+  - changeSet:
+      id: 2
+      author: Ilya Valentsiukevich
+      changes:
         - createTable:
             tableName: post
             columns:
@@ -65,4 +69,4 @@ databaseChangeLog:
                   type: datetime
               - column:
                   name: group_id
-                  type: integer
+                  type: bigint

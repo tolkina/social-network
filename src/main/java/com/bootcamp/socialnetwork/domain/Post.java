@@ -2,39 +2,37 @@ package com.bootcamp.socialnetwork.domain;
 
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
 /**
- *  Entity Post
+ * Entity Post.
  */
 @Entity
 @Table(name = "post")
-public class Post implements Serializable{
+public class Post implements Serializable {
 
     @Id
-    @Column(name="id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
     @Column(name = "username", length = 60, nullable = false)
     private String username;
 
-    @Column(name="text", length=1000)
+    @Column(name = "text", length = 1000)
     private String text;
 
-    @Column(name="time")
-    @Type(type="date")
+    @Column(name = "time")
+    @Type(type = "date")
     private Date time;
 
-    @Column(name="group_id")
+    @Column(name = "group_id")
     private Long groupId;
 
 
-    public Post(){
+    public Post() {
 
     }
 
