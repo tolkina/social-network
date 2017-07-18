@@ -45,3 +45,24 @@ databaseChangeLog:
               - column:
                   name: resume
                   type: varchar(1000)
+        - createTable:
+            tableName: post
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  constants:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: username
+                  type: varchar(60)
+              - column:
+                  name: text
+                  type: varchar(1000)
+              - column:
+                  name: time
+                  type: datetime
+              - column:
+                  name: group_id
+                  type: integer

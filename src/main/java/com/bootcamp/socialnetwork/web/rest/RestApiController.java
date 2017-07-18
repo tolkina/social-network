@@ -1,6 +1,8 @@
 package com.bootcamp.socialnetwork.web.rest;
 
+import com.bootcamp.socialnetwork.service.PostService;
 import com.bootcamp.socialnetwork.service.UserService;
+import com.bootcamp.socialnetwork.service.dto.PostDto;
 import com.bootcamp.socialnetwork.service.dto.UserDto;
 import com.bootcamp.socialnetwork.web.rest.errors.CustomError;
 import org.slf4j.Logger;
@@ -23,6 +25,9 @@ public class RestApiController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PostService postService;
+
 
     // -------------------- Retrieve All Users --------------------
 
@@ -34,6 +39,28 @@ public class RestApiController {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(users, HttpStatus.OK);
+    }
+
+    // -------------------- Retrieve All Posts --------------------
+
+    @RequestMapping(value = "/post/", method = RequestMethod.GET)
+    public ResponseEntity<List<PostDto>> listAllPosts() {
+        List<PostDto> posts = postService.findAllPosts();
+        if (posts.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(posts, HttpStatus.OK);
+    }
+
+    // -------------------- Retrieve All User Posts --------------------
+
+    @RequestMapping(value = "/user/{username}/post/", method = RequestMethod.GET)
+    public ResponseEntity<List<PostDto>> listAllUserPosts(@PathVariable("username") String username) {
+        List<PostDto> posts = postService.findPostsByUsername(username);
+        if (posts.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+        return new ResponseEntity<>(posts, HttpStatus.OK);
     }
 
     // -------------------- Retrieve Single User --------------------
@@ -51,6 +78,40 @@ public class RestApiController {
         }
 
         return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    // -------------------- Retrieve Single Post --------------------
+
+    @RequestMapping(value = "/post/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getPost(@PathVariable("id") Long id) {
+
+        LOGGER.info("Fetching Post with id {}", id);
+
+        PostDto post = postService.findPostById(id);
+        if (post == null) {
+            LOGGER.error("Post with id {} not found.", id);
+            return new ResponseEntity<>(new CustomError("Post with id " + id
+                    + " not found"), HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(post, HttpStatus.OK);
+    }
+
+    // -------------------- Retrieve Single User Post --------------------
+
+    @RequestMapping(value = "/user/{username}/post/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getPost(@PathVariable("username") String username, @PathVariable("id") Long id) {
+
+        LOGGER.info("Fetching Post with id {}", id);
+
+        PostDto post = postService.findPostById(id);
+        if (post == null || !post.getUsername().equals(username)) {
+            LOGGER.error("Post with id {} not found.", id);
+            return new ResponseEntity<>(new CustomError("Post with id " + id
+                    + " not found"), HttpStatus.NOT_FOUND);
+        }
+
+        return new ResponseEntity<>(post, HttpStatus.OK);
     }
 
     // -------------------- Create a User --------------------
@@ -72,12 +133,31 @@ public class RestApiController {
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
 
+    // -------------------- Create a Post --------------------
+
+    @RequestMapping(value = "/post/", method = RequestMethod.POST)
+    public ResponseEntity<?> createPost(@RequestBody PostDto post, UriComponentsBuilder ucBuilder) {
+
+        LOGGER.info("Creating Post : {}", post);
+
+        if (postService.isPostExist(post)) {
+            LOGGER.error("Unable to create. A Post with id {} already exist", post.getId());
+            return new ResponseEntity<>(new CustomError("Unable to create. A Post with id " +
+                    post.getId() + " already exist."), HttpStatus.CONFLICT);
+        }
+        postService.savePost(post);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(ucBuilder.path("/api/post/{id}").buildAndExpand(post.getId()).toUri());
+        return new ResponseEntity<String>(headers, HttpStatus.CREATED);
+    }
+
     // -------------------- Update a User --------------------
 
     @RequestMapping(value = "/user/{username}", method = RequestMethod.PUT)
     public ResponseEntity<?> updateUser(@PathVariable("username") String username, @RequestBody UserDto user) {
 
-        LOGGER.info("Updating User with id {}", username);
+        LOGGER.info("Updating User with username {}", username);
 
         UserDto currentUser = userService.findUserByUsername(username);
         if (currentUser == null) {
@@ -91,6 +171,27 @@ public class RestApiController {
 
         userService.updateUser(currentUser);
         return new ResponseEntity<>(currentUser, HttpStatus.OK);
+    }
+
+    // -------------------- Update a Post --------------------
+
+    @RequestMapping(value = "/post/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<?> updatePost(@PathVariable("id") Long id, @RequestBody PostDto post) {
+
+        LOGGER.info("Updating Post with id {}", id);
+
+        PostDto currentPost = postService.findPostById(id);
+        if (currentPost == null) {
+            LOGGER.error("Unable to update. Post with id {} not found.", id);
+            return new ResponseEntity<>(new CustomError("Unable to update. Post with id " +
+                    id + " not found."), HttpStatus.NOT_FOUND);
+        }
+
+        currentPost.setText(post.getText());
+        currentPost.setTime(post.getTime());
+
+        postService.updatePost(currentPost);
+        return new ResponseEntity<>(currentPost, HttpStatus.OK);
     }
 
     // -------------------- Delete a User --------------------
@@ -111,6 +212,24 @@ public class RestApiController {
         return new ResponseEntity<UserDto>(HttpStatus.NO_CONTENT);
     }
 
+    // -------------------- Delete a Post --------------------
+
+    @RequestMapping(value = "/post/{id}", method = RequestMethod.DELETE)
+    public ResponseEntity<?> deletePost(@PathVariable("id") Long id) {
+
+        LOGGER.info("Fetching & Deleting Post with id {}", id);
+
+        PostDto post = postService.findPostById(id);
+        if (post == null) {
+            LOGGER.error("Unable to delete. Post with id {} not found.", id);
+            return new ResponseEntity<>(new CustomError("Unable to delete. Post with id " +
+                    id + " not found."), HttpStatus.NOT_FOUND);
+        }
+
+        postService.deletePostById(id);
+        return new ResponseEntity<PostDto>(HttpStatus.NO_CONTENT);
+    }
+
     // -------------------- Delete All Users --------------------
 
     @RequestMapping(value = "/user/", method = RequestMethod.DELETE)
@@ -119,6 +238,17 @@ public class RestApiController {
         LOGGER.info("Deleting All Users");
 
         userService.deleteAllUsers();
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    // -------------------- Delete All Posts --------------------
+
+    @RequestMapping(value = "/post/", method = RequestMethod.DELETE)
+    public ResponseEntity<UserDto> deleteAllPosts() {
+
+        LOGGER.info("Deleting All Posts");
+
+        postService.deleteAllPosts();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
