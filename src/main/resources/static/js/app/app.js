@@ -8,6 +8,8 @@ app.constant('urls', {
 app.config(['$stateProvider', '$urlRouterProvider',
     function ($stateProvider, $urlRouterProvider) {
 
+        $urlRouterProvider.otherwise('/');
+
         $stateProvider
             .state('home', {
                 url: '/',
@@ -22,6 +24,25 @@ app.config(['$stateProvider', '$urlRouterProvider',
                         return deferred.promise;
                     }
                 }
+            })
+            .state('profile', {
+                url: '/profile/:id',
+                templateUrl: 'partials/profile',
+                controller: function ($scope, $stateParams, UserService) {
+                    $scope.user = UserService.getUser($stateParams.id);
+                }
+            })
+            .state('register', {
+                url: '/register',
+                templateUrl: 'partials/register',
+                controller: 'UserController',
+                controllerAs: 'ctrl'
+            })
+            .state('login', {
+                url: '/login',
+                templateUrl: 'partials/login',
+                controller: 'SecurityController',
+                controllerAs: 'ctrl'
             });
-        $urlRouterProvider.otherwise('/');
-    }]);
+    }]
+);
