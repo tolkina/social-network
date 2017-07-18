@@ -5,6 +5,8 @@ import com.bootcamp.socialnetwork.service.PostService;
 import com.bootcamp.socialnetwork.service.UserService;
 import com.bootcamp.socialnetwork.service.dto.PostDto;
 import com.bootcamp.socialnetwork.service.dto.UserDto;
+import com.bootcamp.socialnetwork.service.UserService;
+import com.bootcamp.socialnetwork.service.dto.UserProfileDto;
 import com.bootcamp.socialnetwork.web.rest.errors.CustomError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,24 +20,21 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
-public class RestApiController {
+@RequestMapping("/api/profile")
+public class ProfileApiController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RestApiController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProfileApiController.class);
 
     @Autowired
     private UserService userService;
 
-    @Autowired
-    private PostService postService;
 
+    // -------------------- Retrieve All Profiles --------------------
 
-    // -------------------- Retrieve All Users --------------------
+    @RequestMapping(value = "/", method = RequestMethod.GET)
+    public ResponseEntity<List<UserProfileDto>> listAllUsers() {
 
-    @RequestMapping(value = "/user/", method = RequestMethod.GET)
-    public ResponseEntity<List<UserDto>> listAllUsers() {
-
-        List<UserDto> users = userService.findAllUsers();
+        List<UserProfileDto> users = userService.findAllProfiles();
         if (users.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -65,13 +64,14 @@ public class RestApiController {
     }
 
     // -------------------- Retrieve Single User --------------------
+    // -------------------- Retrieve Single Profiles --------------------
 
-    @RequestMapping(value = "/user/{username}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{username}", method = RequestMethod.GET)
     public ResponseEntity<?> getUser(@PathVariable("username") String username) {
 
         LOGGER.info("Fetching User with username {}", username);
 
-        UserDto user = userService.findUserByUsername(username);
+        UserProfileDto user = userService.findProfileByUsername(username);
         if (user == null) {
             LOGGER.error("User with username {} not found.", username);
             return new ResponseEntity<>(new CustomError("User with username " + username

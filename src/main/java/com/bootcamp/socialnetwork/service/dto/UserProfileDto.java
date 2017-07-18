@@ -1,28 +1,32 @@
 package com.bootcamp.socialnetwork.service.dto;
 
-public class UserDto {
+import org.hibernate.validator.constraints.NotBlank;
+
+import javax.validation.constraints.Size;
+
+public class UserProfileDto {
 
     private String username;
 
-    private String password;
+    private boolean enabled;
 
     private String firstName;
 
     private String lastName;
 
-    private String email;
+    private String imageUrl;
 
 
-    public UserDto() {
+    public UserProfileDto() {
 
     }
 
-    public UserDto(String username, String password, String firstName, String lastName, String email) {
+    public UserProfileDto(String username, boolean enabled, String firstName, String lastName, String imageUrl) {
         this.username = username;
-        this.password = password;
+        this.enabled = enabled;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
+        this.imageUrl = imageUrl;
     }
 
 
@@ -34,12 +38,12 @@ public class UserDto {
         this.username = username;
     }
 
-    public String getPassword() {
-        return password;
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public String getFirstName() {
@@ -58,23 +62,23 @@ public class UserDto {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
+    public String getImageUrl() {
+        return imageUrl;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
     }
 
 
     @Override
     public String toString() {
-        return "UserDto{" +
+        return "UserDTO{" +
                 "username='" + username + '\'' +
-                ", password='" + password + '\'' +
+                ", enabled=" + enabled +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                '}';
+                ", imageUrl='" + imageUrl + '\'' +
+                "}";
     }
 }

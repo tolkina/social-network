@@ -2,6 +2,7 @@ package com.bootcamp.socialnetwork.web.rest;
 
 import com.bootcamp.socialnetwork.domain.User;
 import com.bootcamp.socialnetwork.service.UserService;
+import com.bootcamp.socialnetwork.service.dto.UserDto;
 import com.bootcamp.socialnetwork.web.rest.errors.CustomError;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,9 +28,9 @@ public class UserApiController {
     // -------------------- Retrieve All Users --------------------
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    public ResponseEntity<List<User>> listAllUsers() {
+    public ResponseEntity<List<UserDto>> listAllUsers() {
 
-        List<User> users = userService.findAll();
+        List<UserDto> users = userService.findAll();
         if (users.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -43,32 +44,32 @@ public class UserApiController {
 
         LOGGER.info("Fetching User with username {}", username);
 
-        User user = userService.findByUsername(username);
-        if (user == null) {
+        UserDto userDto = userService.findByUsername(username);
+        if (userDto == null) {
             LOGGER.error("User with username {} not found.", username);
             return new ResponseEntity<>(new CustomError("User with username " + username
                     + " not found"), HttpStatus.NOT_FOUND);
         }
 
-        return new ResponseEntity<>(user, HttpStatus.OK);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 
     // -------------------- Create a User --------------------
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
-    public ResponseEntity<?> createUser(@RequestBody User user, UriComponentsBuilder ucBuilder) {
+    public ResponseEntity<?> createUser(@RequestBody UserDto userDto, UriComponentsBuilder ucBuilder) {
 
-        LOGGER.info("Creating User : {}", user);
+        LOGGER.info("Creating User : {}", userDto);
 
-        if (userService.isExist(user)) {
-            LOGGER.error("Unable to create. A User with username {} already exist", user.getUsername());
+        if (userService.isExist(userDto)) {
+            LOGGER.error("Unable to create. A User with username {} already exist", userDto.getUsername());
             return new ResponseEntity<>(new CustomError("Unable to create. A User with username " +
-                    user.getUsername() + " already exist."), HttpStatus.CONFLICT);
+                    userDto.getUsername() + " already exist."), HttpStatus.CONFLICT);
         }
-        userService.save(user);
+        userService.save(userDto);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/api/{username}").buildAndExpand(user.getUsername()).toUri());
+        headers.setLocation(ucBuilder.path("/api/{username}").buildAndExpand(userDto.getUsername()).toUri());
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
 
@@ -79,46 +80,18 @@ public class UserApiController {
 
         LOGGER.info("Updating User with id {}", username);
 
-        User currentUser = userService.findByUsername(username);
-        if (currentUser == null) {
+        UserDto userDto = userService.findByUsername(username);
+        if (userDto == null) {
             LOGGER.error("Unable to update. User with username {} not found.", username);
             return new ResponseEntity<>(new CustomError("Unable to update. User with username " +
                     username + " not found."), HttpStatus.NOT_FOUND);
         }
 
-        currentUser.setFirstName(user.getFirstName());
-        currentUser.setLastName(user.getLastName());
+        userDto.setFirstName(user.getFirstName());
+        userDto.setLastName(user.getLastName());
+        userDto.setEmail(user.getEmail());
 
-        userService.update(currentUser);
-        return new ResponseEntity<>(currentUser, HttpStatus.OK);
-    }
-
-    // -------------------- Delete a User --------------------
-
-    @RequestMapping(value = "/{username}", method = RequestMethod.DELETE)
-    public ResponseEntity<?> deleteUser(@PathVariable("username") String username) {
-
-        LOGGER.info("Fetching & Deleting User with username {}", username);
-
-        User user = userService.findByUsername(username);
-        if (user == null) {
-            LOGGER.error("Unable to delete. User with username {} not found.", username);
-            return new ResponseEntity<>(new CustomError("Unable to delete. User with username " +
-                    username + " not found."), HttpStatus.NOT_FOUND);
-        }
-
-        userService.deleteByUsername(username);
-        return new ResponseEntity<User>(HttpStatus.NO_CONTENT);
-    }
-
-    // -------------------- Delete All Users --------------------
-
-    @RequestMapping(value = "/", method = RequestMethod.DELETE)
-    public ResponseEntity<User> deleteAllUsers() {
-
-        LOGGER.info("Deleting All Users");
-
-        userService.deleteAll();
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        userService.update(userDto);
+        return new ResponseEntity<>(userDto, HttpStatus.OK);
     }
 }
