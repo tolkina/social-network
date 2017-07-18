@@ -1,6 +1,6 @@
 package com.bootcamp.socialnetwork.web.rest;
 
-import com.bootcamp.socialnetwork.service.UserService;
+import com.bootcamp.socialnetwork.service.UserDtoService;
 import com.bootcamp.socialnetwork.service.dto.UserDto;
 import com.bootcamp.socialnetwork.web.rest.errors.CustomError;
 import org.slf4j.Logger;
@@ -15,21 +15,21 @@ import org.springframework.web.util.UriComponentsBuilder;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api")
-public class RestApiController {
+@RequestMapping("/api/profile")
+public class ProfileApiController {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(RestApiController.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProfileApiController.class);
 
     @Autowired
-    private UserService userService;
+    private UserDtoService userDtoService;
 
 
     // -------------------- Retrieve All Users --------------------
 
-    @RequestMapping(value = "/user/", method = RequestMethod.GET)
+    @RequestMapping(value = "/", method = RequestMethod.GET)
     public ResponseEntity<List<UserDto>> listAllUsers() {
 
-        List<UserDto> users = userService.findAllUsers();
+        List<UserDto> users = userDtoService.findAll();
         if (users.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
@@ -38,12 +38,12 @@ public class RestApiController {
 
     // -------------------- Retrieve Single User --------------------
 
-    @RequestMapping(value = "/user/{username}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{username}", method = RequestMethod.GET)
     public ResponseEntity<?> getUser(@PathVariable("username") String username) {
 
         LOGGER.info("Fetching User with username {}", username);
 
-        UserDto user = userService.findByUsername(username);
+        UserDto user = userDtoService.findByUsername(username);
         if (user == null) {
             LOGGER.error("User with username {} not found.", username);
             return new ResponseEntity<>(new CustomError("User with username " + username
@@ -55,31 +55,31 @@ public class RestApiController {
 
     // -------------------- Create a User --------------------
 
-    @RequestMapping(value = "/user/", method = RequestMethod.POST)
+    @RequestMapping(value = "/", method = RequestMethod.POST)
     public ResponseEntity<?> createUser(@RequestBody UserDto user, UriComponentsBuilder ucBuilder) {
 
         LOGGER.info("Creating User : {}", user);
 
-        if (userService.isUserExist(user)) {
+        if (userDtoService.isExist(user)) {
             LOGGER.error("Unable to create. A User with username {} already exist", user.getUsername());
             return new ResponseEntity<>(new CustomError("Unable to create. A User with username " +
                     user.getUsername() + " already exist."), HttpStatus.CONFLICT);
         }
-        userService.saveUser(user);
+        userDtoService.save(user);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/api/user/{username}").buildAndExpand(user.getUsername()).toUri());
+        headers.setLocation(ucBuilder.path("/api/{username}").buildAndExpand(user.getUsername()).toUri());
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
 
     // -------------------- Update a User --------------------
 
-    @RequestMapping(value = "/user/{username}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/{username}", method = RequestMethod.PUT)
     public ResponseEntity<?> updateUser(@PathVariable("username") String username, @RequestBody UserDto user) {
 
         LOGGER.info("Updating User with id {}", username);
 
-        UserDto currentUser = userService.findByUsername(username);
+        UserDto currentUser = userDtoService.findByUsername(username);
         if (currentUser == null) {
             LOGGER.error("Unable to update. User with username {} not found.", username);
             return new ResponseEntity<>(new CustomError("Unable to update. User with username " +
@@ -89,36 +89,36 @@ public class RestApiController {
         currentUser.setFirstName(user.getFirstName());
         currentUser.setLastName(user.getLastName());
 
-        userService.updateUser(currentUser);
+        userDtoService.update(currentUser);
         return new ResponseEntity<>(currentUser, HttpStatus.OK);
     }
 
     // -------------------- Delete a User --------------------
 
-    @RequestMapping(value = "/user/{username}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/{username}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deleteUser(@PathVariable("username") String username) {
 
         LOGGER.info("Fetching & Deleting User with username {}", username);
 
-        UserDto user = userService.findByUsername(username);
+        UserDto user = userDtoService.findByUsername(username);
         if (user == null) {
             LOGGER.error("Unable to delete. User with username {} not found.", username);
             return new ResponseEntity<>(new CustomError("Unable to delete. User with username " +
                     username + " not found."), HttpStatus.NOT_FOUND);
         }
 
-        userService.deleteUserByUsername(username);
+        userDtoService.deleteByUsername(username);
         return new ResponseEntity<UserDto>(HttpStatus.NO_CONTENT);
     }
 
     // -------------------- Delete All Users --------------------
 
-    @RequestMapping(value = "/user/", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/", method = RequestMethod.DELETE)
     public ResponseEntity<UserDto> deleteAllUsers() {
 
         LOGGER.info("Deleting All Users");
 
-        userService.deleteAllUsers();
+        userDtoService.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

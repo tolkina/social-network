@@ -23,14 +23,8 @@ angular.module('socialNetwork').controller('UserController',
         self.onlyNumbers = /^\d+([,.]\d+)?$/;
 
         function submit() {
-            console.log('Submitting');
-            if (self.user.id === undefined || self.user.id === null) {
-                console.log('Saving New User', self.user);
-                createUser(self.user);
-            } else {
-                updateUser(self.user, self.user.id);
-                console.log('User updated with id ', self.user.id);
-            }
+            console.log('Saving a new User', self.user);
+            createUser(self.user);
         }
 
         function createUser(user) {
@@ -53,7 +47,6 @@ angular.module('socialNetwork').controller('UserController',
                 );
         }
 
-
         function updateUser(user, id) {
             console.log('About to update user');
             UserService.updateUser(user, id)
@@ -73,9 +66,8 @@ angular.module('socialNetwork').controller('UserController',
                 );
         }
 
-
         function removeUser(id) {
-            console.log('About to remove User with id ' + id);
+            console.log('About to remove User ' + id);
             UserService.removeUser(id)
                 .then(
                     function () {
@@ -86,7 +78,6 @@ angular.module('socialNetwork').controller('UserController',
                     }
                 );
         }
-
 
         function getAllUsers() {
             return UserService.getAllUsers();
@@ -100,7 +91,7 @@ angular.module('socialNetwork').controller('UserController',
                     self.user = user;
                 },
                 function (errResponse) {
-                    console.error('Error while editing user ' + id + ', Error :' + errResponse.data);
+                    console.error('Error while editing User ' + id + ', Error :' + errResponse.data);
                 }
             );
         }
@@ -111,7 +102,5 @@ angular.module('socialNetwork').controller('UserController',
             self.user = {};
             $scope.myForm.$setPristine(); //reset Form
         }
-    }
-
-
-    ]);
+    }]
+);

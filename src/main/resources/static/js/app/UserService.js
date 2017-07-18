@@ -43,11 +43,11 @@ angular.module('socialNetwork').factory('UserService',
                 $http.get(urls.USER_SERVICE_API + username)
                     .then(
                         function (response) {
-                            console.log('Fetched successfully User with username :' + username);
+                            console.log('Fetched successfully User with username: ' + username);
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
-                            console.error('Error while loading user with username :' + username);
+                            console.error('Error while loading User with username: ' + username);
                             deferred.reject(errResponse);
                         }
                     );
@@ -64,7 +64,7 @@ angular.module('socialNetwork').factory('UserService',
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
-                            console.error('Error while creating User : ' + errResponse.data.errorMessage);
+                            console.error('Error while creating User: ' + errResponse.data.errorMessage);
                             deferred.reject(errResponse);
                         }
                     );
@@ -81,7 +81,7 @@ angular.module('socialNetwork').factory('UserService',
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
-                            console.error('Error while updating User with username :' + username);
+                            console.error('Error while updating User with username: ' + username);
                             deferred.reject(errResponse);
                         }
                     );
@@ -98,12 +98,12 @@ angular.module('socialNetwork').factory('UserService',
                             deferred.resolve(response.data);
                         },
                         function (errResponse) {
-                            console.error('Error while removing User with username :' + username);
+                            console.error('Error while removing User with username: ' + username);
                             deferred.reject(errResponse);
                         }
                     );
                 return deferred.promise;
             }
-
         }
-    ]);
+    ]
+);

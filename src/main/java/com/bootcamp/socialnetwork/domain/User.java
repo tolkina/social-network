@@ -1,10 +1,9 @@
 package com.bootcamp.socialnetwork.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "user")
@@ -19,6 +18,9 @@ public class User implements Serializable {
 
     @Column(name = "enabled")
     private boolean enabled;
+
+    @Column(name = "email")
+    private String email;
 
     @Column(name = "first_name", length = 60)
     private String firstName;
@@ -44,9 +46,12 @@ public class User implements Serializable {
     @Column(name = "resume", length = 1000)
     private String resume;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
+    private Set<Role> roles;
+
 
     public User() {
-
+        roles = new HashSet<>();
     }
 
 
@@ -72,6 +77,14 @@ public class User implements Serializable {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getFirstName() {
@@ -136,5 +149,13 @@ public class User implements Serializable {
 
     public void setResume(String resume) {
         this.resume = resume;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }

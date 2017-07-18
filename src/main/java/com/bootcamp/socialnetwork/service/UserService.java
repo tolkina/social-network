@@ -1,22 +1,22 @@
 package com.bootcamp.socialnetwork.service;
 
-import com.bootcamp.socialnetwork.service.dto.UserDto;
+import com.bootcamp.socialnetwork.domain.User;
 
 import java.util.List;
 
 public interface UserService {
 
-    UserDto findByUsername(String username);
+    User findByUsername(String username);
 
-    void saveUser(UserDto user);
+    void save(User user);
 
-    void updateUser(UserDto user);
+    void update(User user);
 
-    void deleteUserByUsername(String username);
+    void deleteByUsername(String username);
 
-    void deleteAllUsers();
+    void deleteAll();
 
-    List<UserDto> findAllUsers();
+    List<User> findAll();
 
-    boolean isUserExist(UserDto user);
+    boolean isExist(User user);
 }
