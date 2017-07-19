@@ -24,6 +24,10 @@ import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 import java.util.Properties;
 
+/**
+ * Creates datasource using Hikari connection pooling, EntityManagerFactory,
+ * sets up transaction manager and refers to Spring-data repositories.
+ */
 @Configuration
 @EnableJpaRepositories(basePackages = "com.bootcamp.socialnetwork.repositories")
 @EnableTransactionManagement
@@ -49,7 +53,7 @@ public class JpaConfiguration {
     }
 
     /*
-     * Configure HikariCP pooled DataSource.
+     * Configures HikariCP pooled DataSource.
      */
     @Bean
     public DataSource dataSource() {

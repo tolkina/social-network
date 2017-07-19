@@ -8,6 +8,11 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Authentication should only be done by a request to the correct URI
+ * and all other requests should simply fail with a 401 if the user
+ * is not authenticated.
+ */
 @Component
 public final class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 

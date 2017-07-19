@@ -12,8 +12,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Handles successful authentication and responses for a successful
+ * authentication 200 without redirect logic.
+ */
 public class AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
+    // TODO Replace initialization.
     private RequestCache requestCache = new HttpSessionRequestCache();
 
 
