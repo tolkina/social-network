@@ -5,22 +5,25 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.io.Serializable;
 
+/**
+ * Entity of Role.
+ */
 @Entity
-@Table(name = "role", uniqueConstraints = @UniqueConstraint(columnNames = {"role", "username"}))
+@Table(name = "role", uniqueConstraints = @UniqueConstraint(columnNames = {"role", "user"}))
 public class Role implements Serializable {
 
     @Id
     @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     private Long id;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "username", nullable = false)
+    @JoinColumn(name = "user", nullable = false)
     private User user;
 
-    @Column(name = "role", nullable = false, length = 45)
+    @Column(nullable = false, length = 45)
     private String role;
 
 

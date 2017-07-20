@@ -1,8 +1,19 @@
 package com.bootcamp.socialnetwork.service.dto;
 
-public class UserDto {
+import com.bootcamp.socialnetwork.domain.Sex;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-    private String username;
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ * Base DTO of entity User.
+ */
+public class UserDto implements Serializable {
+
+    private Long id;
+
+    private String email;
 
     private String password;
 
@@ -10,28 +21,39 @@ public class UserDto {
 
     private String lastName;
 
-    private String email;
+    private Sex sex;
+
+    private Date birthday;
 
 
     public UserDto() {
 
     }
 
-    public UserDto(String username, String password, String firstName, String lastName, String email) {
-        this.username = username;
+    public UserDto(String email, String password, String firstName, String lastName, Sex sex, Date birthday) {
+        this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.sex = sex;
+        this.birthday = birthday;
+    }
+
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
         this.email = email;
-    }
-
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getPassword() {
@@ -58,23 +80,33 @@ public class UserDto {
         this.lastName = lastName;
     }
 
-    public String getEmail() {
-        return email;
+    public Sex getSex() {
+        return sex;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setSex(Sex sex) {
+        this.sex = sex;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
     }
 
 
     @Override
     public String toString() {
         return "UserDto{" +
-                "username='" + username + '\'' +
+                "id=" + id +
+                ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
+                ", sex=" + sex +
+                ", birthday=" + birthday +
                 '}';
     }
 }

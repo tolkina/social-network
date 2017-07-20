@@ -1,6 +1,5 @@
 package com.bootcamp.socialnetwork.web.rest;
 
-import com.bootcamp.socialnetwork.domain.User;
 import com.bootcamp.socialnetwork.service.UserService;
 import com.bootcamp.socialnetwork.service.dto.UserDto;
 import com.bootcamp.socialnetwork.web.rest.errors.CustomError;
@@ -39,15 +38,15 @@ public class UserApiController {
 
     // -------------------- Retrieve Single User --------------------
 
-    @RequestMapping(value = "/{username}", method = RequestMethod.GET)
-    public ResponseEntity<?> getUser(@PathVariable("username") String username) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public ResponseEntity<?> getUser(@PathVariable("id") Long id) {
 
-        LOGGER.info("Fetching User with username {}", username);
+        LOGGER.info("Fetching User with id {}", id);
 
-        UserDto userDto = userService.findByUsername(username);
+        UserDto userDto = userService.findById(id);
         if (userDto == null) {
-            LOGGER.error("User with username {} not found.", username);
-            return new ResponseEntity<>(new CustomError("User with username " + username
+            LOGGER.error("User with id {} not found.", id);
+            return new ResponseEntity<>(new CustomError("User with id " + id
                     + " not found"), HttpStatus.NOT_FOUND);
         }
 
@@ -61,35 +60,40 @@ public class UserApiController {
 
         LOGGER.info("Creating User : {}", userDto);
 
+        if (userService.isEmailUsed(userDto.getEmail())) {
+            LOGGER.error("Unable to create. A User with email {} already exist", userDto.getEmail());
+            return new ResponseEntity<>(new CustomError("Unable to create. A User with email " +
+                    userDto.getEmail() + " already exist."), HttpStatus.CONFLICT);
+        }
         if (userService.isExist(userDto)) {
-            LOGGER.error("Unable to create. A User with username {} already exist", userDto.getUsername());
-            return new ResponseEntity<>(new CustomError("Unable to create. A User with username " +
-                    userDto.getUsername() + " already exist."), HttpStatus.CONFLICT);
+            LOGGER.error("Unable to create. A User with id {} already exist", userDto.getId());
+            return new ResponseEntity<>(new CustomError("Unable to create. A User with id " +
+                    userDto.getId() + " already exist."), HttpStatus.CONFLICT);
         }
         userService.save(userDto);
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(ucBuilder.path("/api/{username}").buildAndExpand(userDto.getUsername()).toUri());
+        headers.setLocation(ucBuilder.path("/api/user/{id}").buildAndExpand(userDto.getId()).toUri());
         return new ResponseEntity<String>(headers, HttpStatus.CREATED);
     }
 
     // -------------------- Update a User --------------------
 
-    @RequestMapping(value = "/{username}", method = RequestMethod.PUT)
-    public ResponseEntity<?> updateUser(@PathVariable("username") String username, @RequestBody User user) {
+    @RequestMapping(value = "/{id}", method = RequestMethod.PUT)
+    public ResponseEntity<?> updateUser(@PathVariable("id") Long id, @RequestBody UserDto userDto) {
 
-        LOGGER.info("Updating User with id {}", username);
+        LOGGER.info("Updating User with id {}", id);
 
-        UserDto userDto = userService.findByUsername(username);
-        if (userDto == null) {
-            LOGGER.error("Unable to update. User with username {} not found.", username);
-            return new ResponseEntity<>(new CustomError("Unable to update. User with username " +
-                    username + " not found."), HttpStatus.NOT_FOUND);
+        if (!userService.isExist(userDto)) {
+            // TODO Create if not exist.
+            LOGGER.error("Unable to update. User with id {} not found.", id);
+            return new ResponseEntity<>(new CustomError("Unable to update. User with id " +
+                    id + " not found."), HttpStatus.NOT_FOUND);
         }
 
-        userDto.setFirstName(user.getFirstName());
-        userDto.setLastName(user.getLastName());
-        userDto.setEmail(user.getEmail());
+        userDto.setFirstName(userDto.getFirstName());
+        userDto.setLastName(userDto.getLastName());
+        userDto.setEmail(userDto.getEmail());
 
         userService.update(userDto);
         return new ResponseEntity<>(userDto, HttpStatus.OK);

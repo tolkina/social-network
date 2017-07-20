@@ -1,7 +1,7 @@
 package com.bootcamp.socialnetwork.service;
 
 import com.bootcamp.socialnetwork.domain.Post;
-import com.bootcamp.socialnetwork.repositories.PostRepository;
+import com.bootcamp.socialnetwork.repository.PostRepository;
 import com.bootcamp.socialnetwork.service.dto.PostDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,50 +23,71 @@ public class PostServiceImpl implements PostService {
 
 
     @Override
-    public PostDto findPostById(Long id) {
+    public PostDto findById(Long id) {
         try {
-            return modelMapper.map(postRepository.findPostById(id), PostDto.class);
+            return modelMapper.map(postRepository.findById(id), PostDto.class);
         } catch (IllegalArgumentException e) {
             return null;
         }
     }
 
     @Override
-    public List<Post> findPostsByUsername(String username) {
-        return postRepository.findPostsByUsername(username);
+    public PostDto findAllByIdAndAuthor(Long postId, Long authorId) {
+        return modelMapper.map(postRepository.findByIdAndAuthorId(postId, authorId), PostDto.class);
     }
 
     @Override
-    public void savePost(PostDto postDto) {
-        postRepository.save(modelMapper.map(postDto, Post.class));
+    public List<PostDto> findAllByAuthor(Long id) {
+        List<PostDto> posts = new ArrayList<>();
+        for (Post post : postRepository.findAllByAuthorId(id)) {
+            posts.add(modelMapper.map(post, PostDto.class));
+        }
+        return posts;
     }
 
     @Override
-    public void updatePost(PostDto postDto) {
-        savePost(postDto);
+    public List<PostDto> findAllByOwnerUserId(Long id) {
+        List<PostDto> posts = new ArrayList<>();
+        for (Post post : postRepository.findAllByOwnerId(id)) {
+            posts.add(modelMapper.map(post, PostDto.class));
+        }
+        return posts;
     }
 
     @Override
-    public void deletePostById(Long id) {
+    public void save(PostDto postDto) {
+        Post post = modelMapper.map(postDto, Post.class);
+        post.setEnabled(true);
+        post.setTime(System.currentTimeMillis() / 1000L);
+        postRepository.save(post);
+    }
+
+    @Override
+    public void update(PostDto postDto) {
+        save(postDto);
+    }
+
+    @Override
+    public void deleteById(Long id) {
         postRepository.delete(id);
     }
 
     @Override
-    public void deleteAllPosts() {
+    public void deleteAll() {
         postRepository.deleteAll();
     }
 
     @Override
-    public List<PostDto> findAllPosts() {
-        List<PostDto> postDtoList = new ArrayList<>();
+    public List<PostDto> findAll() {
+        List<PostDto> posts = new ArrayList<>();
         for (Post post : postRepository.findAll()) {
-            postDtoList.add(modelMapper.map(post, PostDto.class));
+            posts.add(modelMapper.map(post, PostDto.class));
         }
-        return postDtoList;
+        return posts;
     }
 
     @Override
-    public boolean isPostExist(PostDto postDto) {
-        return findPostById(postDto.getId()) != null;
+    public boolean isExist(PostDto postDto) {
+        return findById(postDto.getId()) != null;
     }
 }

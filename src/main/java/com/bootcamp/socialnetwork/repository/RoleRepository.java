@@ -1,4 +1,4 @@
-package com.bootcamp.socialnetwork.repositories;
+package com.bootcamp.socialnetwork.repository;
 
 import com.bootcamp.socialnetwork.domain.Role;
 import org.springframework.data.jpa.repository.JpaRepository;

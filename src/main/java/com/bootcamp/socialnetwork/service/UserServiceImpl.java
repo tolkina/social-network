@@ -2,7 +2,7 @@ package com.bootcamp.socialnetwork.service;
 
 import com.bootcamp.socialnetwork.domain.Role;
 import com.bootcamp.socialnetwork.domain.User;
-import com.bootcamp.socialnetwork.repositories.UserRepository;
+import com.bootcamp.socialnetwork.repository.UserRepository;
 import com.bootcamp.socialnetwork.service.dto.UserDto;
 import com.bootcamp.socialnetwork.service.dto.UserProfileDto;
 import org.modelmapper.ModelMapper;
@@ -19,21 +19,29 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private ModelMapper modelMapper;
+    private UserRepository userRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private ModelMapper modelMapper;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
 
+    // -------------------- Common --------------------
+
+    @Override
+    public boolean isEmailUsed(String email) {
+        return userRepository.findByEmail(email) != null;
+    }
+
+
     // -------------------- UserDto --------------------
 
     @Override
-    public UserDto findByUsername(String username) {
+    public UserDto findById(Long id) {
         try {
-            return modelMapper.map(userRepository.findByUsername(username), UserDto.class);
+            return modelMapper.map(userRepository.findById(id), UserDto.class);
         } catch (Exception e) {
             return null;
         }
@@ -64,16 +72,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isExist(UserDto userDto) {
-        return findByUsername(userDto.getUsername()) != null;
+        return findById(userDto.getId()) != null;
     }
 
 
     // -------------------- UserProfileDto --------------------
 
     @Override
-    public UserProfileDto findProfileByUsername(String username) {
+    public UserProfileDto findProfileById(Long id) {
         try {
-            return modelMapper.map(userRepository.findByUsername(username), UserProfileDto.class);
+            return modelMapper.map(userRepository.findById(id), UserProfileDto.class);
         } catch (Exception e) {
             return null;
         }
@@ -90,6 +98,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public boolean isExist(UserProfileDto userProfileDto) {
-        return findByUsername(userProfileDto.getUsername()) != null;
+        return findById(userProfileDto.getId()) != null;
     }
 }

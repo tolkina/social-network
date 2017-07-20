@@ -1,37 +1,48 @@
 package com.bootcamp.socialnetwork.service.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.persistence.Column;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.Date;
 
-public class PostDto {
+/**
+ * DTO of entity Post.
+ */
+public class PostDto implements Serializable {
 
-    @NotBlank
     private Long id;
 
-    @NotBlank
-    @Size(min = 1, max = 60)
-    private String username;
+    @JsonIgnore
+    private boolean enabled;
 
-    @Size(max = 1000)
+    /**
+     * Author of the post (User only).
+     */
+    private Long authorId;
+
+    /**
+     * Owner of the post (Group (negative), User (positive)).
+     */
+    private Long ownerId;
+
+    private Long time;
+
     private String text;
 
-    private Date time;
 
-    private Long groupId;
-
-
-    public PostDto(){
+    public PostDto() {
 
     }
 
-    public PostDto(Long id, String username, String text, Date time, Long groupId) {
-        this.id = id;
-        this.username = username;
-        this.text = text;
+    public PostDto(Long authorId, Long ownerId, Long time, String text) {
+        this.enabled = true;
+        this.authorId = authorId;
+        this.ownerId = ownerId;
         this.time = time;
-        this.groupId = groupId;
+        this.text = text;
     }
 
 
@@ -43,12 +54,36 @@ public class PostDto {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
+
+    public Long getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(Long authorId) {
+        this.authorId = authorId;
+    }
+
+    public Long getOwnerId() {
+        return ownerId;
+    }
+
+    public void setOwnerId(Long ownerId) {
+        this.ownerId = ownerId;
+    }
+
+    public Long getTime() {
+        return time;
+    }
+
+    public void setTime(Long time) {
+        this.time = time;
     }
 
     public String getText() {
@@ -59,31 +94,16 @@ public class PostDto {
         this.text = text;
     }
 
-    public Date getTime() {
-        return time;
-    }
-
-    public void setTime(Date time) {
-        this.time = time;
-    }
-
-    public Long getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(Long groupId) {
-        this.groupId = groupId;
-    }
-
 
     @Override
     public String toString() {
         return "PostDto{" +
                 "id=" + id +
-                ", username='" + username + '\'' +
-                ", text='" + text + '\'' +
+                ", enabled=" + enabled +
+                ", authorId=" + authorId +
+                ", ownerId=" + ownerId +
                 ", time=" + time +
-                ", groupId=" + groupId +
+                ", text='" + text + '\'' +
                 '}';
     }
 }

@@ -1,41 +1,71 @@
 package com.bootcamp.socialnetwork.service.dto;
 
-import org.hibernate.validator.constraints.NotBlank;
+import com.bootcamp.socialnetwork.domain.Sex;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.validation.constraints.Size;
+import java.io.Serializable;
+import java.util.Date;
 
-public class UserProfileDto {
+/**
+ * Profile DTO of entity User.
+ */
+public class UserProfileDto implements Serializable {
 
-    private String username;
+    private Long id;
 
+    @JsonIgnore
     private boolean enabled;
+
+    private String email;
 
     private String firstName;
 
     private String lastName;
 
+    private Sex sex;
+
+    private Date birthday;
+
     private String imageUrl;
+
+    private String country;
+
+    private String city;
+
+    private String resume;
 
 
     public UserProfileDto() {
 
     }
 
-    public UserProfileDto(String username, boolean enabled, String firstName, String lastName, String imageUrl) {
-        this.username = username;
-        this.enabled = enabled;
+    public UserProfileDto(String email,
+                          String firstName,
+                          String lastName,
+                          Sex sex,
+                          Date birthday,
+                          String imageUrl,
+                          String country,
+                          String city,
+                          String resume) {
+        this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.sex = sex;
+        this.birthday = birthday;
         this.imageUrl = imageUrl;
+        this.country = country;
+        this.city = city;
+        this.resume = resume;
     }
 
 
-    public String getUsername() {
-        return username;
+    public Long getId() {
+        return id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public boolean isEnabled() {
@@ -44,6 +74,14 @@ public class UserProfileDto {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getFirstName() {
@@ -62,6 +100,22 @@ public class UserProfileDto {
         this.lastName = lastName;
     }
 
+    public Sex getSex() {
+        return sex;
+    }
+
+    public void setSex(Sex sex) {
+        this.sex = sex;
+    }
+
+    public Date getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(Date birthday) {
+        this.birthday = birthday;
+    }
+
     public String getImageUrl() {
         return imageUrl;
     }
@@ -70,15 +124,45 @@ public class UserProfileDto {
         this.imageUrl = imageUrl;
     }
 
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public String getResume() {
+        return resume;
+    }
+
+    public void setResume(String resume) {
+        this.resume = resume;
+    }
+
 
     @Override
     public String toString() {
-        return "UserDTO{" +
-                "username='" + username + '\'' +
+        return "UserProfileDto{" +
+                "id=" + id +
                 ", enabled=" + enabled +
+                ", email='" + email + '\'' +
                 ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
+                ", sex=" + sex +
+                ", birthday=" + birthday +
                 ", imageUrl='" + imageUrl + '\'' +
-                "}";
+                ", country='" + country + '\'' +
+                ", city='" + city + '\'' +
+                ", resume='" + resume + '\'' +
+                '}';
     }
 }

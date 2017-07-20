@@ -1,25 +1,28 @@
 package com.bootcamp.socialnetwork.service;
 
-import com.bootcamp.socialnetwork.domain.Post;
 import com.bootcamp.socialnetwork.service.dto.PostDto;
 
 import java.util.List;
 
 public interface PostService {
 
-    PostDto findPostById(Long id);
+    PostDto findById(Long id);
 
-    List<Post> findPostsByUsername(String username);
+    PostDto findAllByIdAndAuthor(Long postId, Long authorId);
 
-    void savePost(PostDto postDto);
+    List<PostDto> findAllByAuthor(Long id);
 
-    void updatePost(PostDto postDto);
+    List<PostDto> findAllByOwnerUserId(Long id);
 
-    void deletePostById(Long id);
+    void save(PostDto postDto);
 
-    void deleteAllPosts();
+    void update(PostDto postDto);
 
-    List<PostDto> findAllPosts();
+    void deleteById(Long id);
 
-    boolean isPostExist(PostDto postDto);
+    void deleteAll();
+
+    List<PostDto> findAll();
+
+    boolean isExist(PostDto postDto);
 }

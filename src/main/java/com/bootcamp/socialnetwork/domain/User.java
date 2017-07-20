@@ -2,48 +2,54 @@ package com.bootcamp.socialnetwork.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Entity of User.
+ */
 @Entity
 @Table(name = "user")
 public class User implements Serializable {
 
     @Id
-    @Column(name = "username", length = 60, nullable = false)
-    private String username;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column
+    private Long id;
 
-    @Column(name = "password", length = 60)
-    private String password;
-
-    @Column(name = "enabled")
-    private boolean enabled;
-
-    @Column(name = "email")
+    @Column(length = 100, nullable = false, unique = true)
     private String email;
 
-    @Column(name = "first_name", length = 60)
+    @Column(length = 60, nullable = false)
+    private String password;
+
+    @Column
+    private boolean enabled;
+
+    @Column(name = "first_name", length = 50)
     private String firstName;
 
-    @Column(name = "last_name", length = 60)
+    @Column(name = "last_name", length = 50)
     private String lastName;
 
-    @Column(name = "sex")
-    private Integer sex;
+    @Enumerated(EnumType.ORDINAL)
+    @Column
+    private Sex sex;
 
-    @Column(name = "birthday", length = 60)
-    private String birthday;
+    @Column
+    private Date birthday;
 
     @Column(name = "image_url", length = 256)
     private String imageUrl;
 
-    @Column(name = "country", length = 60)
+    @Column(length = 50)
     private String country;
 
-    @Column(name = "city", length = 60)
+    @Column(length = 50)
     private String city;
 
-    @Column(name = "resume", length = 1000)
+    @Column(length = 1000)
     private String resume;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user", cascade = CascadeType.ALL)
@@ -55,12 +61,20 @@ public class User implements Serializable {
     }
 
 
-    public String getUsername() {
-        return username;
+    public Long getId() {
+        return id;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getPassword() {
@@ -79,14 +93,6 @@ public class User implements Serializable {
         this.enabled = enabled;
     }
 
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getFirstName() {
         return firstName;
     }
@@ -103,19 +109,19 @@ public class User implements Serializable {
         this.lastName = lastName;
     }
 
-    public Integer getSex() {
+    public Sex getSex() {
         return sex;
     }
 
-    public void setSex(Integer sex) {
+    public void setSex(Sex sex) {
         this.sex = sex;
     }
 
-    public String getBirthday() {
+    public Date getBirthday() {
         return birthday;
     }
 
-    public void setBirthday(String birthday) {
+    public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
 

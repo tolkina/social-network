@@ -7,9 +7,14 @@ import java.util.List;
 
 public interface UserService {
 
+    // -------------------- Common --------------------
+
+    boolean isEmailUsed(String email);
+
+
     // -------------------- UserDto --------------------
 
-    UserDto findByUsername(String username);
+    UserDto findById(Long id);
 
     void save(UserDto userDto);
 
@@ -22,7 +27,7 @@ public interface UserService {
 
     // -------------------- UserProfileDto --------------------
 
-    UserProfileDto findProfileByUsername(String username);
+    UserProfileDto findProfileById(Long id);
 
     List<UserProfileDto> findAllProfiles();
 

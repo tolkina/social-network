@@ -26,10 +26,10 @@ import java.util.Properties;
 
 /**
  * Creates datasource using Hikari connection pooling, EntityManagerFactory,
- * sets up transaction manager and refers to Spring-data repositories.
+ * sets up transaction manager and refers to Spring-data repository.
  */
 @Configuration
-@EnableJpaRepositories(basePackages = "com.bootcamp.socialnetwork.repositories")
+@EnableJpaRepositories(basePackages = "com.bootcamp.socialnetwork.repository")
 @EnableTransactionManagement
 public class JpaConfiguration {
 
