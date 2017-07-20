@@ -15,7 +15,6 @@ public class Post implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column
     private Long id;
 
     @Column
@@ -24,7 +23,7 @@ public class Post implements Serializable {
     /**
      * Author of the post (User only).
      */
-    @Column(name = "author_id",nullable = false)
+    @Column(name = "author_id", nullable = false)
     private Long authorId;
 
     /**

@@ -1,7 +1,6 @@
 package com.bootcamp.socialnetwork.service.dto;
 
 import com.bootcamp.socialnetwork.domain.Sex;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -28,15 +27,6 @@ public class UserDto implements Serializable {
 
     public UserDto() {
 
-    }
-
-    public UserDto(String email, String password, String firstName, String lastName, Sex sex, Date birthday) {
-        this.email = email;
-        this.password = password;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.sex = sex;
-        this.birthday = birthday;
     }
 
 

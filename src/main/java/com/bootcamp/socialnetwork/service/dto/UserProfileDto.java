@@ -39,26 +39,6 @@ public class UserProfileDto implements Serializable {
 
     }
 
-    public UserProfileDto(String email,
-                          String firstName,
-                          String lastName,
-                          Sex sex,
-                          Date birthday,
-                          String imageUrl,
-                          String country,
-                          String city,
-                          String resume) {
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        this.sex = sex;
-        this.birthday = birthday;
-        this.imageUrl = imageUrl;
-        this.country = country;
-        this.city = city;
-        this.resume = resume;
-    }
-
 
     public Long getId() {
         return id;

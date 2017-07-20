@@ -15,7 +15,6 @@ public class Role implements Serializable {
     @Id
     @JsonIgnore
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(unique = true, nullable = false)
     private Long id;
 
     @JsonIgnore

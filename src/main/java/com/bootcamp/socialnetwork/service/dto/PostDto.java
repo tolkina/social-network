@@ -1,12 +1,8 @@
 package com.bootcamp.socialnetwork.service.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.Column;
-import javax.validation.constraints.Size;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * DTO of entity Post.
@@ -35,14 +31,6 @@ public class PostDto implements Serializable {
 
     public PostDto() {
 
-    }
-
-    public PostDto(Long authorId, Long ownerId, Long time, String text) {
-        this.enabled = true;
-        this.authorId = authorId;
-        this.ownerId = ownerId;
-        this.time = time;
-        this.text = text;
     }
 
 
